@@ -1,13 +1,12 @@
-package likelion12th.SwuniForest.presentation.controller;
+package likelion12th.SwuniForest.presentation.controller.member;
 
-import likelion12th.SwuniForest.service.user.ClovaOcrApi;
-import likelion12th.SwuniForest.service.user.domain.MemberRes;
+import likelion12th.SwuniForest.service.member.ClovaOcrApi;
+import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,12 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.List;
 
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class CheckController { // 배포 후에 로컬 경로가 아닌 s3 버킷으로 변경 필요
+public class OcrController { // 배포 후에 로컬 경로가 아닌 s3 버킷으로 변경 필요
 
 //    // AWS S3 관련 설정
 //    @Value("${aws.s3.bucketName}")
@@ -46,6 +44,7 @@ public class CheckController { // 배포 후에 로컬 경로가 아닌 s3 버�
         // MultipartFile -> File 변환 후 저장
         file.transferTo(new File(filePath));
 
+
         // 방금 저장한 파일 불러오기
         File savedFile = ResourceUtils.getFile(filePath);
         // 요청받은 파일의 확장자를 file.getContentType() 으로 조회하면 PNG같은 확장자가 아닌 multipart/form-data 로 들어가서 OCR API 호출 시 400 에러가 발생한다.
@@ -58,7 +57,7 @@ public class CheckController { // 배포 후에 로컬 경로가 아닌 s3 버�
         }
 
         // OCR API 호출
-        MemberRes memberRes = ocrApi.callApi("POST", savedFile.getPath(), secretKey, ext);
+        MemberResDto memberRes = ocrApi.callApi("POST", savedFile.getPath(), secretKey, ext);
 
         // OCR 결과 처리
         if (memberRes != null) {

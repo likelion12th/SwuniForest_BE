@@ -38,3 +38,6 @@ out/
 
 ### .properties ###
 src/main/resources/application.properties
+
+### static ###
+src/main/resources/static
