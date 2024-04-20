@@ -1,4 +1,4 @@
-package likelion12th.SwuniForest.utill;
+package likelion12th.SwuniForest.util;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class JsonUtill {
+public class JsonUtil {
     /**
      * JSONObject => Map<String, String>
      * @param {JSONObject} jsonObject

@@ -1,4 +1,4 @@
-package likelion12th.SwuniForest.service.user;
+package likelion12th.SwuniForest.service.member;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import likelion12th.SwuniForest.service.user.domain.MemberRes;
-import likelion12th.SwuniForest.utill.JsonUtill;
+import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
+import likelion12th.SwuniForest.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.json.simple.JSONArray;
@@ -39,7 +39,7 @@ public class ClovaOcrApi {
      * @param {string} ext 확장자
      * @returns {List} 추출 text list
      */
-    public MemberRes callApi(String type, String filePath, String naver_secretKey, String ext) {
+    public MemberResDto callApi(String type, String filePath, String naver_secretKey, String ext) {
         String apiURL = url;
         String secretKey = naver_secretKey;
         String imageFile = filePath;
@@ -47,7 +47,7 @@ public class ClovaOcrApi {
 
         log.info("callApi Start!");
 
-        MemberRes memberRes = null;
+        MemberResDto memberRes = null;
         try {
             URL url = new URL(apiURL);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -97,9 +97,9 @@ public class ClovaOcrApi {
             parseData = jsonparse(response);
 
             // 가공한 데이터 dto 변환
-            memberRes = MemberRes.builder()
+            memberRes = MemberResDto.builder()
                     .studentNum(parseData.get(0))
-                    .name(parseData.get(1))
+                    .username(parseData.get(1))
                     .major(parseData.get(2))
                     .build();
 
@@ -164,7 +164,7 @@ public class ClovaOcrApi {
         JSONObject JSONObjImage = (JSONObject)JSONArrayPerson.get(0);
         JSONArray s = (JSONArray) JSONObjImage.get("fields");
         //
-        List<Map<String, Object>> m = JsonUtill.getListMapFromJsonArray(s);
+        List<Map<String, Object>> m = JsonUtil.getListMapFromJsonArray(s);
         List<String> result = new ArrayList<>();
         for (Map<String, Object> as : m) {
             result.add((String) as.get("inferText"));
