@@ -1,12 +1,3 @@
----
-name: "✅ FEATURE"
-about: Feature 작업 사항을 작성해주세요.
-title: ''
-labels: ''
-assignees: ''
-
----
-
 ## Description
 { 업무에 대한 요약 및 설명 }
 
