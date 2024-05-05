@@ -60,6 +60,7 @@ public class MemberService {
 
     // 현재 securityContext에 저장된 username의 정보만 가져오는 메소드
     // 현재 로그인한 회원의 정보 가져오기
+    // 전체 정보가 필요할까..? 학과 정보만 필요할 것 같아서 우선 분리해서 만들어두고 나중에 지우든지 할듯
     @Transactional(readOnly = true)
     public MemberResDto getMyMemberInfo() {
         String studentNum = SecurityUtil.getCurrentStudentNum();
@@ -85,6 +86,15 @@ public class MemberService {
         }
     }
 
+    // 현재 로그인한 유저 학과 정보 가져오기
+    public String getMyUserMajor() {
+        String studentNum = SecurityUtil.getCurrentStudentNum();
+
+        Optional<Member> currentMember = memberRepository.findByStudentNum(studentNum);
+        Member member = currentMember.get();
+
+        return member.getMajor();
+    }
 
 
     // 특정 회원 정보 조회 (관리자)
