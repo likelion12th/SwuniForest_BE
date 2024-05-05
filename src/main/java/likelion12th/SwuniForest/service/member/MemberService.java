@@ -62,9 +62,14 @@ public class MemberService {
     // 현재 로그인한 회원의 정보 가져오기
     @Transactional(readOnly = true)
     public Optional<Member> getMyMemberInfo() {
-        return SecurityUtil.getCurrentStudentNum()
-                .flatMap(memberRepository::findByStudentNum);
+        String studentNum = SecurityUtil.getCurrentUsername();
+        log.info(studentNum);
+
+        Optional<Member> currentMember = memberRepository.findByStudentNum(studentNum);
+        return currentMember;
     }
+
+
 
     // 특정 회원 정보 조회 (관리자)
     @Transactional(readOnly = true)

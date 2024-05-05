@@ -80,6 +80,8 @@ public class TokenProvider implements InitializingBean {
         Member principal = new Member(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+
+
     }
 
     // 토큰의 유효성 검증을 수행

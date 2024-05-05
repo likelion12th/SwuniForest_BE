@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+                // token을 사용하는 방식이기 때문에 csrf를 disable
                 .csrf((csrf)->csrf.disable())
 
 
@@ -56,7 +56,7 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/api/login", "/api/signup", "/naverOcrPost").permitAll()
+                        .requestMatchers("/login", "/signup", "/naverOcrPost").permitAll()
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )

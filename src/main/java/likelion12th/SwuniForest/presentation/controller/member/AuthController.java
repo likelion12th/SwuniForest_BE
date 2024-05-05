@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AuthController {
     private final TokenProvider tokenProvider;
@@ -35,7 +34,6 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginDto.getStudentNum(), loginDto.getPassword());
 
         // authenticate 메소드가 실행이 될 때 CustomUserDetailsService class의 loadUserByUsername 메소드가 실행
-        // load
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 해당 객체를 SecurityContextHolder에 저장하고
