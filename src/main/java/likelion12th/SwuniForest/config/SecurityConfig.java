@@ -1,10 +1,13 @@
 package likelion12th.SwuniForest.config;
 
 import likelion12th.SwuniForest.jwt.*;
+import likelion12th.SwuniForest.service.member.CustomUserDetailsService;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,23 +22,16 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
+@AllArgsConstructor
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-
-    public SecurityConfig(
-            TokenProvider tokenProvider,
-            CorsFilter corsFilter,
-            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
-    ) {
-        this.tokenProvider = tokenProvider;
-        this.corsFilter = corsFilter;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
+    private final CustomUserDetailsService customUserDetailsService;
+    private static final String [] AUTH_WHITELIST = {
+            "/login", "/signup", "/naverOcrPost", "/user"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -47,18 +43,19 @@ public class SecurityConfig {
         http
                 // token을 사용하는 방식이기 때문에 csrf를 disable
                 .csrf((csrf)->csrf.disable())
+                .cors(Customizer.withDefaults())
 
 
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(customUserDetailsService, tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedHandler(jwtAccessDeniedHandler)
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
 
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/login", "/signup", "/naverOcrPost").permitAll()
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PathRequest.toH2Console()).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .anyRequest().permitAll()
                 )
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
@@ -69,9 +66,8 @@ public class SecurityConfig {
                 // enable h2-console
                 .headers(headers ->
                         headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-                )
+                );
 
-                .with(new JwtSecurityConfig(tokenProvider), customizer -> {});
         return http.build();
     }
 }

@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,18 +23,17 @@ public class MemberController {
         return ResponseEntity.ok(memberService.signup(memberReqDto));
     }
 
-    // 회원 정보 조회 (마이페이지)
-    // 현재 구현 페이지 상으로는 필요없는 기능 같다.
+    // 현재 로그인한 회원 정보 조회
     @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('USER','ADMIN')")
-    public ResponseEntity<Member> getMyUserInfo() {
-        return ResponseEntity.ok(memberService.getMyMemberInfo().get());
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    public ResponseEntity<MemberResDto> getMyUserInfo() {
+        return ResponseEntity.ok(memberService.getMyMemberInfo());
     }
 
 
     // 특정 회원 정보 조회 (관리자)
     @GetMapping("/user/{studentNum}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<MemberResDto> getUserInfo(@PathVariable String studentNum) {
         return ResponseEntity.ok(memberService.getMemberInfo(studentNum));
     }

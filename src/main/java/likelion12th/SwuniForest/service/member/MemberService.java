@@ -61,12 +61,28 @@ public class MemberService {
     // 현재 securityContext에 저장된 username의 정보만 가져오는 메소드
     // 현재 로그인한 회원의 정보 가져오기
     @Transactional(readOnly = true)
-    public Optional<Member> getMyMemberInfo() {
-        String studentNum = SecurityUtil.getCurrentUsername();
-        log.info(studentNum);
+    public MemberResDto getMyMemberInfo() {
+        String studentNum = SecurityUtil.getCurrentStudentNum();
 
         Optional<Member> currentMember = memberRepository.findByStudentNum(studentNum);
-        return currentMember;
+
+        // 조회한 회원이 존재한다면
+        if (currentMember.isPresent()) {
+            // member 객체 가져오기
+            Member member = currentMember.get();
+
+            // entity -> dto 변환
+            MemberResDto memberResDto = MemberResDto.builder()
+                    .studentNum(member.getStudentNum())
+                    .username(member.getUsername())
+                    .major(member.getMajor())
+                    .build();
+
+            return memberResDto;
+
+        } else { // 회원이 존재하지 않는 경우
+            throw new RuntimeException("존재하지 않는 회원입니다.");
+        }
     }
 
 

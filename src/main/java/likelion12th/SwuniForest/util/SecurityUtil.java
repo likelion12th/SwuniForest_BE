@@ -12,15 +12,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Slf4j
 public class SecurityUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityUtil.class);
-
     // 생성자
     private SecurityUtil() {}
 
     // Request가 들어올 때 JwtFilter의 doFilter 메소드가
     // SecurityContext에 Authentication 객체를 저장해서 사용
     // 현재 요청을 보낸 회원의 저장된 Authentication 객체를 통해 username을 조회할 수 있음
-    public static String getCurrentUsername() {
+    public static String getCurrentStudentNum() {
 
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -28,10 +26,7 @@ public class SecurityUtil {
             throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
         }
 
-
-
+        return authentication.getName();
     }
-
-
 
 }
