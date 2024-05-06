@@ -60,11 +60,42 @@ public class MemberService {
 
     // 현재 securityContext에 저장된 username의 정보만 가져오는 메소드
     // 현재 로그인한 회원의 정보 가져오기
+    // 전체 정보가 필요할까..? 학과 정보만 필요할 것 같아서 우선 분리해서 만들어두고 나중에 지우든지 할듯
     @Transactional(readOnly = true)
-    public Optional<Member> getMyMemberInfo() {
-        return SecurityUtil.getCurrentStudentNum()
-                .flatMap(memberRepository::findByStudentNum);
+    public MemberResDto getMyMemberInfo() {
+        String studentNum = SecurityUtil.getCurrentStudentNum();
+
+        Optional<Member> currentMember = memberRepository.findByStudentNum(studentNum);
+
+        // 조회한 회원이 존재한다면
+        if (currentMember.isPresent()) {
+            // member 객체 가져오기
+            Member member = currentMember.get();
+
+            // entity -> dto 변환
+            MemberResDto memberResDto = MemberResDto.builder()
+                    .studentNum(member.getStudentNum())
+                    .username(member.getUsername())
+                    .major(member.getMajor())
+                    .build();
+
+            return memberResDto;
+
+        } else { // 회원이 존재하지 않는 경우
+            throw new RuntimeException("존재하지 않는 회원입니다.");
+        }
     }
+
+    // 현재 로그인한 유저 학과 정보 가져오기
+    public String getMyUserMajor() {
+        String studentNum = SecurityUtil.getCurrentStudentNum();
+
+        Optional<Member> currentMember = memberRepository.findByStudentNum(studentNum);
+        Member member = currentMember.get();
+
+        return member.getMajor();
+    }
+
 
     // 특정 회원 정보 조회 (관리자)
     @Transactional(readOnly = true)
