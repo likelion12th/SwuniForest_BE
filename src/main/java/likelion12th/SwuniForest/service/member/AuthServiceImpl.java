@@ -8,7 +8,6 @@ import likelion12th.SwuniForest.service.member.domain.dto.MemberReqDto;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import likelion12th.SwuniForest.service.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

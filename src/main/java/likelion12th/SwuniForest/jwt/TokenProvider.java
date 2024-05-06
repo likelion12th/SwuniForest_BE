@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    private static final String AUTHORITIES_KEY = "auth";
 
     @Value("${jwt.token.key}") private String secretKey;
     // 토큰 만료 시간
