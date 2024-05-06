@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +45,17 @@ public class GuestbookController {
             return ResponseEntity.ok("방명록이 성공적으로 작성되었습니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("방명록 작성 중 오류가 발생했습니다.");
+        }
+    }
+
+    // 방명록 전체 조회
+    @GetMapping("/")
+    public ResponseEntity<List<GuestbookDto>> getAllGuestbook(){
+        try {
+            List<GuestbookDto> guestbookList = guestbookService.getAllGuestbook();
+            return ResponseEntity.ok(guestbookList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }

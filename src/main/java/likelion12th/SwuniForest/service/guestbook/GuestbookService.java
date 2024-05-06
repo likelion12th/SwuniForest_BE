@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +54,22 @@ public class GuestbookService {
                 .build();
 
         return guestbookRes;
+    }
+
+    public List<GuestbookDto> getAllGuestbook() {
+        List<Guestbook> guestbookList = guestbookRepository.findAll();
+
+        // 저장된 방명록의 정보를 guestbookResList(dto)로 변환하여 반환
+        List<GuestbookDto> guestbookResList = guestbookList.stream()
+                .map(guestbook -> GuestbookDto.builder()
+                        .guestName(guestbook.getGuestName())
+                        .guestContent(guestbook.getGuestContent())
+                        .fileName(guestbook.getFileName())
+                        .anonymous(guestbook.isAnonymous())
+                        .build())
+                .collect(Collectors.toList());
+
+        return guestbookResList;
     }
 
 }
