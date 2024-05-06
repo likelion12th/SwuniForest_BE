@@ -32,11 +32,9 @@ public class AuthServiceImpl implements AuthService {
         String studentNum = loginDto.getStudentNum();
         String password = loginDto.getPassword();
         Optional<Member> optionalMember = memberRepository.findByStudentNum(studentNum);
-        Member member = optionalMember.get();
 
-        if (member == null) {
-            throw new UsernameNotFoundException("해당 회원이 존재하지 않습니다.");
-        }
+        // optionalMember가 존재하지 않는 경우 예외 발생
+        Member member = optionalMember.orElseThrow(() -> new UsernameNotFoundException("해당 회원이 존재하지 않습니다."));
 
         // 암호화된 password를 디코딩한 값과 입력한 패스워드 값이 다르면 null 반환
         if (!encoder.matches(password, member.getPassword())) {

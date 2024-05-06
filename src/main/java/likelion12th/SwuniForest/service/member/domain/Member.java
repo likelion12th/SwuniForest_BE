@@ -39,6 +39,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    // 모바일 학생증 이미지
+    private String fileName;
+
     public Member(String subject, String s, Collection<? extends GrantedAuthority> authorities) {
     }
 }
