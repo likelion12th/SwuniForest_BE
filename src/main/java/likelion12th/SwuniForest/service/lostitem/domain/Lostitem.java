@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -34,4 +36,6 @@ public class Lostitem {
     // 분실물 게시판 이미지
     private String fileName;
 
+    // 게시글 작성 시간
+    private LocalDateTime createdAt;
 }
