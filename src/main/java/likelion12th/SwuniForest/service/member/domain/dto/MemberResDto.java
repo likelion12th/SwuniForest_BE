@@ -9,4 +9,5 @@ public class MemberResDto { // ocr api 호출 후 데이터 응답
     private String studentNum;
     private String username;
     private String major;
+    private Boolean visited;
 }

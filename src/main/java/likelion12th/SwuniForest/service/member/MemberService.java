@@ -26,12 +26,14 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    
+
     @Transactional
     public MemberResDto signup(MemberReqDto memberReqDto) {
-        // unique 속성인 학번으로 이미 존재하는 회원인지 확인
-        if (memberRepository.findByStudentNum(memberReqDto.getStudentNum()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 회원입니다.");
+        Optional optionalMember = memberRepository.findByStudentNum(memberReqDto.getStudentNum());
+
+        // 이미 가입된 회원인지 확인
+        if (optionalMember.isPresent()) {
+            throw new RuntimeException("이미 존재하는 회원입니다.");
         }
 
         // 가입되어 있지 않은 회원이면,
@@ -56,6 +58,7 @@ public class MemberService {
                 .studentNum(member.getStudentNum())
                 .username(member.getUsername())
                 .major(member.getMajor())
+                .visited(member.getVisited())
                 .build();
 
         return memberResDto;
@@ -81,6 +84,7 @@ public class MemberService {
                     .studentNum(member.getStudentNum())
                     .username(member.getUsername())
                     .major(member.getMajor())
+                    .visited(member.getVisited())
                     .build();
 
             return memberResDto;
@@ -88,16 +92,6 @@ public class MemberService {
         } else { // 회원이 존재하지 않는 경우
             throw new RuntimeException("존재하지 않는 회원입니다.");
         }
-    }
-
-    // 현재 로그인한 유저 학과 정보 가져오기
-    public String getMyUserMajor() {
-        String studentNum = SecurityUtil.getCurrentStudentNum();
-
-        Optional<Member> currentMember = memberRepository.findByStudentNum(studentNum);
-        Member member = currentMember.get();
-
-        return member.getMajor();
     }
 
 
@@ -116,6 +110,7 @@ public class MemberService {
                     .studentNum(member.getStudentNum())
                     .username(member.getUsername())
                     .major(member.getMajor())
+                    .visited(member.getVisited())
                     .build();
 
             return memberResDto;
@@ -126,4 +121,20 @@ public class MemberService {
 
     }
 
+    public void update_visited(String studentNum) {
+        Optional<Member> memberOptional = memberRepository.findByStudentNum(studentNum);
+
+        // 조회한 회원이 존재한다면
+        if (memberOptional.isPresent()) {
+            // member 객체 가져오기
+            Member member = memberOptional.get();
+
+            // 방문 여부 true로 변경
+            member.visited();
+            memberRepository.save(member);
+
+        } else { // 회원이 존재하지 않는 경우
+            throw new RuntimeException("존재하지 않는 회원입니다.");
+        }
+    }
 }

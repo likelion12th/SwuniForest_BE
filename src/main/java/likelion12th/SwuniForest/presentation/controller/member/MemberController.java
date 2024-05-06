@@ -2,7 +2,6 @@ package likelion12th.SwuniForest.presentation.controller.member;
 
 import jakarta.validation.Valid;
 import likelion12th.SwuniForest.service.member.MemberService;
-import likelion12th.SwuniForest.service.member.domain.Member;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberReqDto;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,7 @@ public class MemberController {
             MemberResDto memberResDto = memberService.signup(memberReqDto);
             return new ResponseEntity(memberResDto, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity("회원가입 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

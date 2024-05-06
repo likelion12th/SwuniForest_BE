@@ -2,6 +2,7 @@ package likelion12th.SwuniForest.service.member.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
@@ -35,13 +36,17 @@ public class Member {
     @Column(length = 300, nullable = false)
     private String password;
 
+    // 방문 여부
+    @Builder.Default
+    private Boolean visited = false;
+
     // 권한
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // 모바일 학생증 이미지
-    private String fileName;
-
-    public Member(String subject, String s, Collection<? extends GrantedAuthority> authorities) {
+    // 방문 여부 변경
+    public void visited() {
+        this.visited = true;
     }
+
 }
