@@ -5,6 +5,7 @@ import likelion12th.SwuniForest.service.member.domain.Role;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberReqDto;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import likelion12th.SwuniForest.service.member.repository.MemberRepository;
+import likelion12th.SwuniForest.service.stamp.domain.Stamp;
 import likelion12th.SwuniForest.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,8 +46,9 @@ public class MemberService {
                 .major(memberReqDto.getMajor())
                 .password(passwordEncoder.encode(memberReqDto.getPassword()))
                 .role(Role.ROLE_USER)
+                .stamp(new Stamp()) // 서윤 추가
                 .build();
-
+        member.getStamp().setMember(member); // 서윤 추가
         log.info("유저 생성");
 
         memberRepository.save(member);
