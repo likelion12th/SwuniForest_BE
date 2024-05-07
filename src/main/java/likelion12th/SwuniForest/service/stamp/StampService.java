@@ -1,5 +1,7 @@
 package likelion12th.SwuniForest.service.stamp;
 
+import likelion12th.SwuniForest.service.member.MemberService;
+import likelion12th.SwuniForest.service.member.domain.Member;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import likelion12th.SwuniForest.service.member.repository.MemberRepository;
 import likelion12th.SwuniForest.service.stamp.domain.Certification;
@@ -18,17 +20,17 @@ public class StampService {
 
     private final StampRepository stampRepository;
     private final CertificationRepository certificationRepository;
-
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void checkStamp(String depCode) {
-        /*
 
-        -- 현재 로그인중인 유저 (Member) 가져와야함 ( 스템프 아이디 대응 )  --
-        Stamp stamp = stampRepository.findByMember(member)
-         */
-        // 우선 1번만
-        Stamp stamp = stampRepository.findById(1L).orElseThrow(() -> new RuntimeException("스템프를 찾을 수 없습니다."));
+        MemberResDto memberResDto = memberService.getMyMemberInfo();
+
+        Member member =  memberRepository.findByStudentNum(memberResDto.getStudentNum()).get();
+        Stamp stamp = stampRepository.findByMember(member).get();
+
         // 학과 코드로 학과 조회
         if(certificationRepository.findByCode(depCode).isPresent()){
             Certification certification = certificationRepository.findByCode(depCode).get();
@@ -156,13 +158,10 @@ public class StampService {
     @Transactional
     public StampDto stampBoard(){
 
-         /*
+        MemberResDto memberResDto = memberService.getMyMemberInfo();
 
-        -- 현재 로그인중인 유저 (Member) 가져와야함 ( 스템프 아이디 대응 )  --
-        Stamp stamp = stampRepository.findByMember(member)
-         */
-        // 우선 1번만
-        Stamp stamp = stampRepository.findById(1L).orElseThrow(() -> new RuntimeException("스템프를 찾을 수 없습니다."));
+        Member member =  memberRepository.findByStudentNum(memberResDto.getStudentNum()).get();
+        Stamp stamp = stampRepository.findByMember(member).get();
         // entity -> dto 변환
         StampDto stampDto = StampDto.builder()
                 .dep1Checked(stamp.isDep1Checked())
