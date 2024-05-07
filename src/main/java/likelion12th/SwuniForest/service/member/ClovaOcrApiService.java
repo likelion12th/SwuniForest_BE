@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import likelion12th.SwuniForest.service.guestbook.S3Service;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import likelion12th.SwuniForest.util.JsonUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.json.simple.JSONArray;
@@ -23,13 +25,51 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.AbstractAuditable_;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Component
-public class ClovaOcrApi {
+@RequiredArgsConstructor
+public class ClovaOcrApiService {
     @Value("${naver.service.url}")
     private String url;
+
+    @Value("${naver.service.secretKey}")
+    private String secretKey;
+
+    private final S3Service s3Service;
+
+    // 사용자가 요청한 이미지를 통해 ocr api 호출
+    public MemberResDto doOcr(MultipartFile imageFile) throws IOException {
+        // MultipartFile -> File 전환 하며 로컬에 파일 생성됨
+        File uploadFile = s3Service.convert(imageFile)
+                .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
+
+        String originalName = uploadFile.getName(); // 파일명
+        String filePath = uploadFile.getPath(); // 로컬에 임시 저장된 파일 경로
+
+        // 요청받은 파일의 확장자를 file.getContentType() 으로 조회하면 PNG같은 확장자가 아닌 multipart/form-data 로 들어가서 OCR API 호출 시 400 에러가 발생한다.
+        // 저장한 File 객체의 확장자를 불러오기 위해 지정된 메소드가 없기 떄문에 살짝은.. 끼워맞추기 식으로 문자열 추출을 하였다.
+        String ext = "";
+        int lastDotIndex = uploadFile.getName().lastIndexOf('.');
+        if (lastDotIndex > 0) {
+            ext = originalName.substring(lastDotIndex + 1);
+        }
+
+        // OCR API 호출
+        MemberResDto memberRes = callApi("POST", filePath, secretKey, ext);
+
+        // 임시 저장된 파일 삭제
+        if (uploadFile.delete()) {
+            log.info("파일이 삭제되었습니다.");
+        } else {
+            log.info("파일이 삭제되지 못했습니다.");
+        }
+
+        return memberRes;
+    }
 
     /**
      * 네이버 ocr api 호출한다
@@ -40,6 +80,7 @@ public class ClovaOcrApi {
      * @returns {List} 추출 text list
      */
     public MemberResDto callApi(String type, String filePath, String naver_secretKey, String ext) {
+
         String apiURL = url;
         String secretKey = naver_secretKey;
         String imageFile = filePath;
@@ -58,7 +99,6 @@ public class ClovaOcrApi {
             con.setRequestMethod(type);
             String boundary = "----" + UUID.randomUUID().toString().replaceAll("-", "");
             con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-            con.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary); // HTTP 요청 헤더를 설정합니다.
             con.setRequestProperty("X-OCR-SECRET", secretKey); // 시크릿 키를 설정합니다.
 
             JSONObject json = new JSONObject(); // JSON 객체 생성
@@ -78,6 +118,7 @@ public class ClovaOcrApi {
             File file = new File(imageFile);
             writeMultiPart(wr, postParams, file, boundary);
             wr.close();
+
 
             int responseCode = con.getResponseCode();
             BufferedReader br;
@@ -103,11 +144,13 @@ public class ClovaOcrApi {
                     .major(parseData.get(2))
                     .build();
 
+
         } catch (Exception e) {
             System.out.println(e);
         }
         return memberRes;
     }
+
 
     /**
      * writeMultiPart

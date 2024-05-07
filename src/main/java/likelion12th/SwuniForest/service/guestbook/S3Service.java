@@ -29,6 +29,7 @@ public class S3Service {
     @Value("${aws.bucketName}")
     private String bucket;
 
+
     // MultipartFile을 전달받아 File로 전환한 후 S3에 업로드
     // dirName의 디렉토리가 S3 Bucket 내부에 생성됨
     public String upload(MultipartFile multipartFile, String dirName) throws IOException {
@@ -66,7 +67,7 @@ public class S3Service {
         }
     }
 
-    private Optional<File> convert(MultipartFile file) throws  IOException {
+    public Optional<File> convert(MultipartFile file) throws  IOException {
         File convertFile = new File(file.getOriginalFilename()); // 업로드한 파일의 이름
         if(convertFile.createNewFile()) {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
