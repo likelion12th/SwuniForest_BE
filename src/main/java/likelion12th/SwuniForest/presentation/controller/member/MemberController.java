@@ -30,7 +30,7 @@ public class MemberController {
 
     // 현재 로그인한 회원 정보 조회
     @GetMapping("/user")
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<MemberResDto> getMyUserInfo() {
         try {
             MemberResDto memberResDto = memberService.getMyMemberInfo();

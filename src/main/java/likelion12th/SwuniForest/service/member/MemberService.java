@@ -12,12 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,6 +43,7 @@ public class MemberService {
                 .role(Role.ROLE_USER)
                 .stamp(new Stamp()) // 서윤 추가
                 .build();
+
         member.getStamp().setMember(member); // 서윤 추가
         log.info("유저 생성");
 
@@ -67,9 +63,7 @@ public class MemberService {
     }
 
 
-    // 현재 securityContext에 저장된 username의 정보만 가져오는 메소드
     // 현재 로그인한 회원의 정보 가져오기
-    // 전체 정보가 필요할까..? 학과 정보만 필요할 것 같아서 우선 분리해서 만들어두고 나중에 지우든지 할듯
     @Transactional(readOnly = true)
     public MemberResDto getMyMemberInfo() {
         String studentNum = SecurityUtil.getCurrentStudentNum();

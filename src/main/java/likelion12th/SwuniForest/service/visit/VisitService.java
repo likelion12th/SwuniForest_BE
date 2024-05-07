@@ -1,11 +1,7 @@
-package likelion12th.SwuniForest.service.member;
+package likelion12th.SwuniForest.service.visit;
 
-import likelion12th.SwuniForest.service.member.domain.Member;
-import likelion12th.SwuniForest.service.member.domain.Visit;
-import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
-import likelion12th.SwuniForest.service.member.repository.MemberRepository;
-import likelion12th.SwuniForest.service.member.repository.VisitRepository;
-import likelion12th.SwuniForest.util.SecurityUtil;
+import likelion12th.SwuniForest.service.visit.domain.Visit;
+import likelion12th.SwuniForest.service.visit.repository.VisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

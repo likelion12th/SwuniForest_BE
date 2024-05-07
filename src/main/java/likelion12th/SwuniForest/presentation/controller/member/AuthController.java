@@ -29,13 +29,12 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
         try {
+            // tokenDto를 이용해 response body에도 넣어서 리턴
             String token = this.authService.login(loginDto);
             return new ResponseEntity<>(new TokenDto(token), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
-        // tokenDto를 이용해 response body에도 넣어서 리턴
-
     }
 }
