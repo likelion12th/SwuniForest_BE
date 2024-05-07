@@ -1,6 +1,7 @@
 package likelion12th.SwuniForest.service.member.domain;
 
 import jakarta.persistence.*;
+import likelion12th.SwuniForest.service.stamp.domain.Stamp;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -39,6 +40,13 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+
+    // 서윤 추가
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Stamp stamp;
+
     public Member(String subject, String s, Collection<? extends GrantedAuthority> authorities) {
+
     }
+
 }
