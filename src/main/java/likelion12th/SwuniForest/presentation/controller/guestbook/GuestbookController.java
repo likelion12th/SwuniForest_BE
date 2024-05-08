@@ -1,7 +1,7 @@
 package likelion12th.SwuniForest.presentation.controller.guestbook;
 
 import likelion12th.SwuniForest.service.guestbook.GuestbookService;
-import likelion12th.SwuniForest.service.guestbook.S3Service;
+import likelion12th.SwuniForest.service.S3Service;
 import likelion12th.SwuniForest.service.guestbook.domain.dto.GuestbookDto;
 import likelion12th.SwuniForest.service.guestbook.repository.GuestbookRepository;
 import lombok.RequiredArgsConstructor;

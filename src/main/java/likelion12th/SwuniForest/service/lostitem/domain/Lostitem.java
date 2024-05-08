@@ -23,11 +23,7 @@ public class Lostitem {
     @Column(nullable = false, length=30)
     private String itemTitle;
 
-    // 분실물 게시판 글 내용
-    @Column(nullable = false, length=50)
-    private String itemContent;
-
-    // 분실물 발견한 곳
+    // 분실물 발견한 곳(주운 곳)
     private String findPoint;
 
     // 분실물 맡긴 곳
