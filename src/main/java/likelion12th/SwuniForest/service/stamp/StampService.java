@@ -194,6 +194,11 @@ public class StampService {
                 .dep28Checked(stamp.isDep28Checked())
                 .dep29Checked(stamp.isDep29Checked())
                 .dep30Checked(stamp.isDep30Checked())
+                .dep31Checked(stamp.isDep31Checked())
+                .dep32Checked(stamp.isDep32Checked())
+                .dep33Checked(stamp.isDep33Checked())
+                .dep34Checked(stamp.isDep34Checked())
+                .dep35Checked(stamp.isDep35Checked())
                 .build();
         return stampDto;
     }
