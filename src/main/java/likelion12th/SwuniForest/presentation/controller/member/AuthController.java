@@ -28,9 +28,13 @@ public class AuthController {
     // 로그인 요청 시 jwt 토큰 발급
     @PostMapping("/login")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
+        try {
+            // tokenDto를 이용해 response body에도 넣어서 리턴
+            String token = this.authService.login(loginDto);
+            return new ResponseEntity<>(new TokenDto(token), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
-        String token = this.authService.login(loginDto);
-        // tokenDto를 이용해 response body에도 넣어서 리턴
-        return new ResponseEntity<>(new TokenDto(token), HttpStatus.OK);
+        }
     }
 }

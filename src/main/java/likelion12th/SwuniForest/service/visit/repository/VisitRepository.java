@@ -1,6 +1,6 @@
-package likelion12th.SwuniForest.service.member.repository;
+package likelion12th.SwuniForest.service.visit.repository;
 
-import likelion12th.SwuniForest.service.member.domain.Visit;
+import likelion12th.SwuniForest.service.visit.domain.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

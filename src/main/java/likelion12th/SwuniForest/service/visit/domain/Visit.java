@@ -1,4 +1,4 @@
-package likelion12th.SwuniForest.service.member.domain;
+package likelion12th.SwuniForest.service.visit.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
