@@ -42,7 +42,7 @@ public class GuestbookController {
         // 방명록 등록
         try {
             GuestbookDto response = guestbookService.createGuestbook(guestbookDto, fileName);
-            return ResponseEntity.ok("방명록이 성공적으로 작성되었습니다.");
+            return new ResponseEntity(response, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("방명록 작성 중 오류가 발생했습니다.");
         }

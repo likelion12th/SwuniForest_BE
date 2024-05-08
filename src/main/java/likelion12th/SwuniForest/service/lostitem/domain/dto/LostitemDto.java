@@ -23,4 +23,7 @@ public class LostitemDto {
 
     // 분실물 맡긴 곳
     private String putPoint;
+
+    // 게시글 작성 시간
+    private LocalDateTime createdAt;
 }

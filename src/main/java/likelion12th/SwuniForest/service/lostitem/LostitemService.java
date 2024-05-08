@@ -1,5 +1,7 @@
 package likelion12th.SwuniForest.service.lostitem;
 
+import likelion12th.SwuniForest.service.guestbook.domain.Guestbook;
+import likelion12th.SwuniForest.service.guestbook.domain.dto.GuestbookDto;
 import likelion12th.SwuniForest.service.lostitem.domain.Lostitem;
 import likelion12th.SwuniForest.service.lostitem.domain.dto.LostitemDto;
 import likelion12th.SwuniForest.service.lostitem.repository.LostitemRepository;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +44,27 @@ public class LostitemService {
                 .findPoint(lostitem.getFindPoint())
                 .putPoint(lostitem.getPutPoint())
                 .fileName(lostitem.getFileName())
+                .createdAt(lostitem.getCreatedAt())
                 .build();
 
         return lostitemRes;
+    }
+
+    // 분실물 게시판 글 전체 조회
+    public List<LostitemDto> getAllLostitem() {
+        List<Lostitem> lostitemList = lostitemRepository.findAll();
+
+        // 게시판의 글 정보를 lostitemResList(dto)로 변환하여 반환
+        List<LostitemDto> lostitemResList = lostitemList.stream()
+                .map(lostitem -> LostitemDto.builder()
+                        .itemTitle(lostitem.getItemTitle())
+                        .findPoint(lostitem.getFindPoint())
+                        .putPoint(lostitem.getPutPoint())
+                        .fileName(lostitem.getFileName())
+                        .createdAt(lostitem.getCreatedAt())
+                        .build())
+                .collect(Collectors.toList());
+
+        return lostitemResList;
     }
 }
