@@ -3,6 +3,7 @@ package likelion12th.SwuniForest.service.guestbook;
 import likelion12th.SwuniForest.service.guestbook.domain.Guestbook;
 import likelion12th.SwuniForest.service.guestbook.domain.dto.GuestbookDto;
 import likelion12th.SwuniForest.service.guestbook.repository.GuestbookRepository;
+import likelion12th.SwuniForest.service.member.MemberService;
 import likelion12th.SwuniForest.service.member.domain.Member;
 import likelion12th.SwuniForest.service.member.domain.Role;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GuestbookService {
     private final GuestbookRepository guestbookRepository;
+    private final MemberService memberService;
 
     // 방명록 작성
     @Transactional
@@ -29,7 +31,14 @@ public class GuestbookService {
         boolean isAnonymous = guestbookDto.isAnonymous();
 
         // 사용자가 익명으로 글을 작성한 경우, 이름을 "익명"으로 설정
-        String guestName = isAnonymous ? "익명" : guestbookDto.getGuestName();
+        String guestName;
+        if (isAnonymous) {
+            guestName = "익명";
+        } else {
+            // 로그인한 사용자의 정보를 가져옴
+            MemberResDto memberResDto = memberService.getMyMemberInfo();
+            guestName = memberResDto.getUsername();
+        }
 
         // 방명록 객체 생성
         Guestbook guestbook = Guestbook.builder()
