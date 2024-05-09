@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,27 +39,29 @@ public class CertificationController {
     }
 
 
-    // 관리자별 코드 반환 - 임시
+    // 관리자별 코드 반환 - 사용  X
     @GetMapping("/{depNumber}")
-    public ResponseEntity<String> getDepCode(@PathVariable Long depNumber) {
+    public ResponseEntity<CertificationDto> getDepCode(@PathVariable Long depNumber) {
         try {
             certificationService.getDepCode(depNumber);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유효하지 않은 학과번호 입니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(certificationService.getDepCode(depNumber));
     }
-    // 관리자별 코드 반환 - 로그인 중인 유저
-    //@PreAuthorize("hasAnyRole('ROLE_USER')")
+
+    // 관리자별 코드 반환 - 로그인 중인 관리자 (이걸로 사용)
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     @GetMapping()
-    public ResponseEntity<String> getDepCode() {
+    public ResponseEntity<CertificationDto> getDepCode() {
         MemberResDto memberResDto = memberService.getMyMemberInfo();
         Member member =  memberRepository.findByStudentNum(memberResDto.getStudentNum()).get();
         Long depNumber = getDepNum(member.getStudentNum());
         try {
             certificationService.getDepCode(depNumber);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유효하지 않은 학과정보입니다.");
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
         return ResponseEntity.ok(certificationService.getDepCode(depNumber));
     }
