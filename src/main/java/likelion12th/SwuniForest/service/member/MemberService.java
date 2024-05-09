@@ -45,11 +45,8 @@ public class MemberService {
                 .build();
 
         member.getStamp().setMember(member); // 서윤 추가
-        log.info("유저 생성");
-
         memberRepository.save(member);
 
-        log.info("유저 저장");
 
         // entity -> dto 변환
         MemberResDto memberResDto = MemberResDto.builder()
@@ -117,20 +114,5 @@ public class MemberService {
 
     }
 
-    public void update_visited(String studentNum) {
-        Optional<Member> memberOptional = memberRepository.findByStudentNum(studentNum);
 
-        // 조회한 회원이 존재한다면
-        if (memberOptional.isPresent()) {
-            // member 객체 가져오기
-            Member member = memberOptional.get();
-
-            // 방문 여부 true로 변경
-            member.visited();
-            memberRepository.save(member);
-
-        } else { // 회원이 존재하지 않는 경우
-            throw new RuntimeException("존재하지 않는 회원입니다.");
-        }
-    }
 }

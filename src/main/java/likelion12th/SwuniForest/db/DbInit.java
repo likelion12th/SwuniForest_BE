@@ -31,7 +31,16 @@ public class DbInit {
                 "dep29", "dep30", "dep31", "dep32", "dep33", "dep34", "dep35"
         };
 
-        // 폼으로 입력하는게 아니라서.. 미리 선언
+        // 학과별 비밀번호 리스트
+        String [] passwordList = {
+            "8fnSkODZ", "IqriN419", "VJezcA8O", "b49GAQyt", "VQwse9s2", "lDmYe729", "ND2mBtcz", "7XZO46Js",
+            "b5FTmB6k", "BRxo8sou", "MMlxy51k", "pvvsgAMN", "W2Y7qeY1", "0EGI2duF", "XBIvxwTf", "6lrAqPyW",
+            "KNZ6clpT", "Tf7AThSJ", "cB4r6QjC", "3lPbdfdg", "TVUY5TP6", "Y1XOvaff", "RVTrr4tn", "HZOsJSJQ",
+            "N00F9nG9", "iLIEint5", "Nop88W0M", "aAa7vp4w", "CAkg4oXU", "O7uIo7W5", "9Smt72zZ", "Se9dpdBv",
+            "stC1lTlZ", "2KidIg3Q", "3mludySU"
+        };
+
+
         String adminPassword = "likelion1212!!";
 
         // 최상위 관리자 계정 생성
@@ -52,6 +61,7 @@ public class DbInit {
                     .visitor(0L)
                     .totalStudent(100L)
                     .visitRate(0L)
+                    .ranking(0)
                     .build();
 
             visitRepository.save(visit);
@@ -60,28 +70,11 @@ public class DbInit {
             Member manager = Member.builder()
                     .studentNum(majorList[i]) // 영문학과명 + 숫자로 수정
                     .major(majorList[i])
-                    .password(generateRandomString(8))
+                    .password(passwordEncoder.encode(passwordList[i]))
                     .role(Role.ROLE_MANAGER)
                     .build();
 
             memberRepository.save(manager);
         }
     }
-
-    // 랜덤 스트링 생성 메소드
-    private String generateRandomString(int length) {
-        String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder(length);
-
-        for (int i = 0; i < length; i++) {
-            int randomIndex = random.nextInt(CHARACTERS.length());
-            sb.append(CHARACTERS.charAt(randomIndex));
-        }
-
-        return sb.toString();
-    }
-
-
 }
