@@ -24,7 +24,7 @@ public class StampController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("스템프 처리 실패");
         }
 
-        return ResponseEntity.ok("스템프 처리 성공 " + depCode );
+        return ResponseEntity.ok("스템프 처리 성공 " );
     }
 
     // 로그인한 유저의 스템프판 조회 - 모든 학과에 대한 조회
