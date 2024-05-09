@@ -1,5 +1,9 @@
 package likelion12th.SwuniForest.presentation.controller.stamp;
 
+import likelion12th.SwuniForest.service.member.MemberService;
+import likelion12th.SwuniForest.service.member.domain.Member;
+import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
+import likelion12th.SwuniForest.service.member.repository.MemberRepository;
 import likelion12th.SwuniForest.service.stamp.CertificationService;
 import likelion12th.SwuniForest.service.stamp.domain.Certification;
 import likelion12th.SwuniForest.service.stamp.domain.dto.CertificationDto;
@@ -24,7 +28,8 @@ public class CertificationController {
     private final CertificationRepository certificationRepository;
 
     private final CertificationService certificationService;
-
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     // 모든 코드 리스트 반환
     @GetMapping("/all")
@@ -33,7 +38,7 @@ public class CertificationController {
     }
 
 
-    // 관리자별 코드 반환
+    // 관리자별 코드 반환 - 임시
     @GetMapping("/{depNumber}")
     public ResponseEntity<String> getDepCode(@PathVariable Long depNumber) {
         try {
@@ -43,4 +48,26 @@ public class CertificationController {
         }
         return ResponseEntity.ok(certificationService.getDepCode(depNumber));
     }
+    // 관리자별 코드 반환 - 로그인 중인 유저
+    //@PreAuthorize("hasAnyRole('ROLE_USER')")
+    @GetMapping()
+    public ResponseEntity<String> getDepCode() {
+        MemberResDto memberResDto = memberService.getMyMemberInfo();
+        Member member =  memberRepository.findByStudentNum(memberResDto.getStudentNum()).get();
+        Long depNumber = getDepNum(member.getStudentNum());
+        try {
+            certificationService.getDepCode(depNumber);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("유효하지 않은 학과정보입니다.");
+        }
+        return ResponseEntity.ok(certificationService.getDepCode(depNumber));
+    }
+
+    public Long getDepNum(String studentNum) {
+        // "dep"를 제외한 부분
+        String depNumString = studentNum.substring(3);
+        Long depNum = Long.parseLong(depNumString);
+        return depNum;
+    }
+
 }
