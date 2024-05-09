@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class AuthController {
 
     private final AuthService authService;
@@ -30,8 +31,8 @@ public class AuthController {
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
         try {
             // tokenDto를 이용해 response body에도 넣어서 리턴
-            String token = this.authService.login(loginDto);
-            return new ResponseEntity<>(new TokenDto(token), HttpStatus.OK);
+            TokenDto tokenDto = authService.login(loginDto);
+            return new ResponseEntity<>(tokenDto, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 
