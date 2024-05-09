@@ -9,6 +9,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,15 +36,23 @@ public class CertificationService {
         }
     }
 
-    // 1분마다 인증번호 갱신
-    @Scheduled(fixedRate = 60000)
+    // 5분마다 인증번호 갱신
+    @Scheduled(fixedRate = 300000)
     public void scheduledUpdateCertificationCodes() {
         List<Certification> certifications = certificationRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+
         for (Certification certification : certifications) {
+            LocalDateTime nextExpirationTime = now.plusMinutes(5); // 5분 후
+            String formattedExpirationTime = nextExpirationTime.format(formatter);
             certification.setCode(generateNewCode());
+            certification.setExpirationTime(formattedExpirationTime);
             certificationRepository.save(certification);
         }
     }
+
 
     // 새로운 인증번호 생성
     private String generateNewCode() {
@@ -58,16 +69,22 @@ public class CertificationService {
                 .map(certification -> CertificationDto.builder()
                         .department(certification.getDepartment())
                         .code(certification.getCode())
+                        .expirationTime(certification.getExpirationTime())
                         .build())
                 .collect(Collectors.toList());
     }
 
     // 학과별 코드 반환
     @Transactional
-    public String getDepCode(Long depNumber){
-        Optional<Certification> certification = certificationRepository.findById(depNumber);
-        if (certification.isPresent()){
-            return certification.get().getCode();
+    public CertificationDto getDepCode(Long depNumber){
+        Optional<Certification> optionalCertification = certificationRepository.findById(depNumber);
+        if (optionalCertification.isPresent()){
+            Certification certification = optionalCertification.get();
+            return CertificationDto.builder()
+                    .department(certification.getDepartment())
+                    .code(certification.getCode())
+                    .expirationTime(certification.getExpirationTime())
+                    .build();
         }
         else{
             throw new RuntimeException("유효하지 않은 학과번호입니다.");
