@@ -43,6 +43,8 @@ public class GuestbookController {
         try {
             GuestbookDto response = guestbookService.createGuestbook(guestbookDto, fileName);
             return new ResponseEntity(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("익명을 풀고 싶다면 로그인해주세요.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("방명록 작성 중 오류가 발생했습니다.");
         }

@@ -30,14 +30,20 @@ public class GuestbookService {
         // 클라이언트로부터 전송된 요청에서 익명 여부를 확인
         boolean isAnonymous = guestbookDto.isAnonymous();
 
+
         // 사용자가 익명으로 글을 작성한 경우, 이름을 "익명"으로 설정
         String guestName;
         if (isAnonymous) {
             guestName = "익명";
         } else {
-            // 로그인한 사용자의 정보를 가져옴
+            // 로그인한 사용자의 정보 -> guestName
             MemberResDto memberResDto = memberService.getMyMemberInfo();
-            guestName = memberResDto.getUsername();
+            if (memberResDto != null) {
+                guestName = memberResDto.getUsername();
+            } else {
+                // 로그인이 필요한 경우 메시지 반환
+                throw new RuntimeException("로그인이 필요합니다.");
+            }
         }
 
         // 방명록 객체 생성
