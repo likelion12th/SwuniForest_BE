@@ -1,4 +1,4 @@
-package likelion12th.SwuniForest.service.guestbook;
+package likelion12th.SwuniForest.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;

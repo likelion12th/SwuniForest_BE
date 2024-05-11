@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -20,6 +22,9 @@ public class Certification {
 
     private String department;
     private String code;
+    // 만료 시각
+    private String expirationTime;
+
 
 
 }

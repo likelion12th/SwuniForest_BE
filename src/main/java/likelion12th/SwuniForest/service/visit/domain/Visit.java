@@ -29,24 +29,24 @@ public class Visit {
     // 방문률 산출
     private Long visitRate;
 
-    // 생성자 추가
-    // 모든 필드를 매개변수로 받는 생성자
-    public Visit (String major, Long visitor, Long totalStudent) {
-        this.major = major;
-        this.visitor = visitor;
-        this.totalStudent = totalStudent;
-        this.visitRate = calculateVisitRate(visitor, totalStudent);
-    }
+    // 방문율 순위
+    private int ranking;
+
 
     // 방문률 계산 메서드
-    private Long calculateVisitRate(Long visitor, Long totalStudent) {
+    public void setVisitRate(Long visitor, Long totalStudent) {
         if (totalStudent == 0) {
-            return 0L; // 분모가 0이면 방문률을 0으로 설정
+            this.visitRate = 0L;
+        } else {
+            this.visitRate = (visitor * 100) / totalStudent;
         }
-        return (visitor * 100) / totalStudent;
     }
 
     public void addVisitor() {
         visitor++;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking = ranking;
     }
 }

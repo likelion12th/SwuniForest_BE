@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import likelion12th.SwuniForest.service.guestbook.S3Service;
+import likelion12th.SwuniForest.service.S3Service;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import likelion12th.SwuniForest.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.jpa.domain.AbstractAuditable_;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
