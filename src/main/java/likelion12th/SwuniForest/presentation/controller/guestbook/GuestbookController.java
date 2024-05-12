@@ -4,6 +4,8 @@ import likelion12th.SwuniForest.service.guestbook.GuestbookService;
 import likelion12th.SwuniForest.service.S3Service;
 import likelion12th.SwuniForest.service.guestbook.domain.dto.GuestbookDto;
 import likelion12th.SwuniForest.service.guestbook.repository.GuestbookRepository;
+import likelion12th.SwuniForest.service.member.MemberService;
+import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,6 @@ import java.util.List;
 @RequestMapping("/api/guestbook")
 public class GuestbookController {
 
-    private final GuestbookRepository guestbookRepository;
     private final GuestbookService guestbookService;
     private final S3Service s3Service;
 
@@ -60,4 +61,5 @@ public class GuestbookController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
 }

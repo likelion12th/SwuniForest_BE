@@ -10,22 +10,19 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
-
 @RequiredArgsConstructor
 @Component
 public class DbInit {
 
     private final MemberRepository memberRepository;
     private final VisitRepository visitRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     @PostConstruct
     public void setDefaultData() {
         // 전체 학과 리스트
         String [] majorList = {
-                "dep1", "dep2", "dep3", "dep4", "dep5", "dep6", "dep7", "dep8", "dep9", "dep10",
+                "소프트웨어융합학과", "dep2", "dep3", "dep4", "dep5", "dep6", "dep7", "dep8", "dep9", "dep10",
                 "dep11", "dep12", "dep13", "dep14", "dep15", "dep16", "dep17", "dep18", "dep19",
                 "dep20", "dep21", "dep22", "dep23", "dep24", "dep25", "dep26", "dep27", "dep28",
                 "dep29", "dep30", "dep31", "dep32", "dep33", "dep34", "dep35"
@@ -45,9 +42,9 @@ public class DbInit {
 
         // 최상위 관리자 계정 생성
         Member admin = Member.builder()
-                .studentNum("2021111412") // 우선 내 학번으로 했음
+                .studentNum("likelion1212!!")
                 .username("admin")
-                .major("likelion12th")
+                .major("likelion")
                 .password(passwordEncoder.encode(adminPassword))
                 .role(Role.ROLE_ADMIN)
                 .build();
@@ -68,7 +65,7 @@ public class DbInit {
 
             // 학과별 부스 운영진 계정 생성
             Member manager = Member.builder()
-                    .studentNum(majorList[i]) // 영문학과명 + 숫자로 수정
+                    .studentNum(majorList[i]) // 영문학과명으로 수정
                     .major(majorList[i])
                     .password(passwordEncoder.encode(passwordList[i]))
                     .role(Role.ROLE_MANAGER)

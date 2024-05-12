@@ -21,7 +21,25 @@ public class VisitService {
     private final MemberRepository memberRepository;
     private final VisitRepository visitRepository;
 
-    // 방문하기
+    // 방문율 데이터 가져오기
+    // 방문 상태 변경 + 방문율 데이터 가져오기
+    public VisitResDto getVisitinfo(MemberResDto memberResDto) {
+        Optional visitOptional = visitRepository.findByMajor(memberResDto.getMajor());
+        Optional<Member> memberOptional = memberRepository.findByStudentNum(memberResDto.getStudentNum());
+        Visit visit = (Visit) visitOptional.get();
+        Member member = memberOptional.get();
+
+        // 순위 업데이트 후 저장
+        calculateRankingByVisitRate();
+
+        return VisitResDto.builder()
+                .username(member.getUsername())
+                .major(member.getMajor())
+                .visitRate(visit.getVisitRate())
+                .rank(visit.getRanking())
+                .build();
+    }
+
     public VisitResDto update_visit(MemberResDto memberResDto) {
         Optional visitOptional = visitRepository.findByMajor(memberResDto.getMajor());
         Optional<Member> memberOptional = memberRepository.findByStudentNum(memberResDto.getStudentNum());
@@ -42,15 +60,9 @@ public class VisitService {
             member.visited();
             memberRepository.save(member);
 
-            // 순위 업데이트 후 저장
-            calculateRankingByVisitRate();
+            // 방문율 데이터 가져오기
+            return getVisitinfo(memberResDto);
 
-            return VisitResDto.builder()
-                    .username(member.getUsername())
-                    .major(member.getMajor())
-                    .visitRate(visit.getVisitRate())
-                    .rank(visit.getRanking())
-                    .build();
 
         } else { // 로그인한 회원의 학과가 존재하지 않는 경우
             throw new RuntimeException("존재하지 않는 학과입니다.");
@@ -58,7 +70,7 @@ public class VisitService {
     }
 
     // 방문율을 기준으로 순위 산출
-    public void calculateRankingByVisitRate() {
+    private void calculateRankingByVisitRate() {
         List<Visit> allVisits = visitRepository.findAll();
 
         // 방문율을 기준으로 내림차순 정렬
