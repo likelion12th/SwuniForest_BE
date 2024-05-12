@@ -3,6 +3,7 @@ package likelion12th.SwuniForest.presentation.controller.visit;
 import likelion12th.SwuniForest.service.member.MemberService;
 import likelion12th.SwuniForest.service.visit.VisitService;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
+import likelion12th.SwuniForest.service.visit.domain.dto.RankingDto;
 import likelion12th.SwuniForest.service.visit.domain.dto.VisitResDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -24,7 +27,7 @@ public class VisitController {
     private final VisitService visitService;
 
     // 방문하기
-    @PostMapping("")
+    @PostMapping("/change")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity visited() {
         MemberResDto memberResDto = memberService.getMyMemberInfo();
@@ -46,5 +49,13 @@ public class VisitController {
         MemberResDto memberResDto = memberService.getMyMemberInfo();
         VisitResDto visitResDto = visitService.getVisitinfo(memberResDto);
         return new ResponseEntity(visitResDto, HttpStatus.OK);
+    }
+
+    // 방문율 전체 랭킹 조회 (권한 필요 없음)
+    @GetMapping("")
+    public ResponseEntity getVisitRanking() {
+
+        List<RankingDto> rankingDtoList = visitService.getVisitRanking();
+        return ResponseEntity.ok(rankingDtoList);
     }
 }

@@ -1,15 +1,18 @@
 package likelion12th.SwuniForest.service.visit;
 
+import likelion12th.SwuniForest.service.lostitem.domain.dto.LostitemDto;
 import likelion12th.SwuniForest.service.member.MemberService;
 import likelion12th.SwuniForest.service.member.domain.Member;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
 import likelion12th.SwuniForest.service.member.repository.MemberRepository;
 import likelion12th.SwuniForest.service.visit.domain.Visit;
+import likelion12th.SwuniForest.service.visit.domain.dto.RankingDto;
 import likelion12th.SwuniForest.service.visit.domain.dto.VisitResDto;
 import likelion12th.SwuniForest.service.visit.repository.VisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,6 +23,22 @@ public class VisitService {
 
     private final MemberRepository memberRepository;
     private final VisitRepository visitRepository;
+
+    // 방문율 전체 랭킹 조회
+    public List<RankingDto> getVisitRanking() {
+        List<Visit> visitRankingList = visitRepository.findAllByOrderByVisitRateDesc();
+
+
+        List<RankingDto> rankingDtoList = visitRankingList.stream()
+                .map(visit -> RankingDto.builder()
+                        .major(visit.getMajor())
+                        .visitRate(visit.getVisitRate())
+                        .rank(visit.getRanking())
+                        .build())
+                .collect(Collectors.toList());
+
+        return rankingDtoList;
+    }
 
     // 방문율 데이터 가져오기
     // 방문 상태 변경 + 방문율 데이터 가져오기
