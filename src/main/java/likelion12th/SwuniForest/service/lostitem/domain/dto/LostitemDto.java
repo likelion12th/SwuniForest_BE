@@ -1,6 +1,7 @@
 package likelion12th.SwuniForest.service.lostitem.domain.dto;
 
 
+import likelion12th.SwuniForest.service.visit.domain.dto.VisitResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,4 +27,6 @@ public class LostitemDto {
 
     // 게시글 작성 시간
     private LocalDateTime createdAt;
+
+
 }

@@ -10,20 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api")
+@RequestMapping("/api/visit")
 public class VisitController {
 
     private final MemberService memberService;
     private final VisitService visitService;
 
     // 방문하기
-    @GetMapping("/visit")
+    @PostMapping("")
     @PreAuthorize("hasAnyRole('ROLE_USER')")
     public ResponseEntity visited() {
         MemberResDto memberResDto = memberService.getMyMemberInfo();
@@ -36,5 +37,14 @@ public class VisitController {
             // 방문하기 성공하면 방문율 데이터 dto 리턴
             return new ResponseEntity(visitResDto, HttpStatus.OK);
         }
+    }
+
+    // 방문율 데이터 불러오기
+    @GetMapping("/info")
+    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    public ResponseEntity getVisitInfo() {
+        MemberResDto memberResDto = memberService.getMyMemberInfo();
+        VisitResDto visitResDto = visitService.getVisitinfo(memberResDto);
+        return new ResponseEntity(visitResDto, HttpStatus.OK);
     }
 }

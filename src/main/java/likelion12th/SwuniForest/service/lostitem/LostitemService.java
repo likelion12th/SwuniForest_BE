@@ -5,12 +5,20 @@ import likelion12th.SwuniForest.service.guestbook.domain.dto.GuestbookDto;
 import likelion12th.SwuniForest.service.lostitem.domain.Lostitem;
 import likelion12th.SwuniForest.service.lostitem.domain.dto.LostitemDto;
 import likelion12th.SwuniForest.service.lostitem.repository.LostitemRepository;
+import likelion12th.SwuniForest.service.member.domain.Member;
+import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
+import likelion12th.SwuniForest.service.member.repository.MemberRepository;
+import likelion12th.SwuniForest.service.visit.VisitService;
+import likelion12th.SwuniForest.service.visit.domain.Visit;
+import likelion12th.SwuniForest.service.visit.domain.dto.VisitResDto;
+import likelion12th.SwuniForest.service.visit.repository.VisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

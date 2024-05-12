@@ -7,6 +7,11 @@ import likelion12th.SwuniForest.service.member.MemberService;
 import likelion12th.SwuniForest.service.member.domain.Member;
 import likelion12th.SwuniForest.service.member.domain.Role;
 import likelion12th.SwuniForest.service.member.domain.dto.MemberResDto;
+import likelion12th.SwuniForest.service.member.repository.MemberRepository;
+import likelion12th.SwuniForest.service.visit.VisitService;
+import likelion12th.SwuniForest.service.visit.domain.Visit;
+import likelion12th.SwuniForest.service.visit.domain.dto.VisitResDto;
+import likelion12th.SwuniForest.service.visit.repository.VisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -22,6 +28,9 @@ import java.util.stream.Collectors;
 public class GuestbookService {
     private final GuestbookRepository guestbookRepository;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
+    private final VisitRepository visitRepository;
+    private final VisitService visitService;
 
     // 방명록 작성
     @Transactional

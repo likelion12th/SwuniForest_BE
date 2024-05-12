@@ -1,6 +1,7 @@
 package likelion12th.SwuniForest.service.guestbook.domain;
 
 import jakarta.persistence.*;
+import likelion12th.SwuniForest.service.visit.domain.dto.VisitResDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +32,6 @@ public class Guestbook {
     // 익명 여부
     @Column(nullable = false)
     private boolean anonymous;
+
+
 }
