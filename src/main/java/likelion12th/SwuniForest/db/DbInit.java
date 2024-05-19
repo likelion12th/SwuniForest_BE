@@ -37,41 +37,47 @@ public class DbInit {
             "stC1lTlZ", "2KidIg3Q", "3mludySU"
         };
 
+        if (memberRepository.count() == 0) {
+            String adminPassword = "likelion1212!!";
 
-        String adminPassword = "likelion1212!!";
-
-        // 최상위 관리자 계정 생성
-        Member admin = Member.builder()
-                .studentNum("likelion1212!!")
-                .username("admin")
-                .major("likelion")
-                .password(passwordEncoder.encode(adminPassword))
-                .role(Role.ROLE_ADMIN)
-                .build();
-
-        memberRepository.save(admin);
-
-        for (int i = 0; i < majorList.length; i++) {
-            // 학과별 방문율 데이터 생성
-            Visit visit = Visit.builder()
-                    .major(majorList[i])
-                    .visitor(0L)
-                    .totalStudent(100L)
-                    .visitRate(0L)
-                    .ranking(0)
+            // 최상위 관리자 계정 생성
+            Member admin = Member.builder()
+                    .studentNum("likelion1212!!")
+                    .username("admin")
+                    .major("likelion")
+                    .password(passwordEncoder.encode(adminPassword))
+                    .role(Role.ROLE_ADMIN)
                     .build();
 
-            visitRepository.save(visit);
+            memberRepository.save(admin);
 
-            // 학과별 부스 운영진 계정 생성
-            Member manager = Member.builder()
-                    .studentNum(majorList[i]) // 영문학과명으로 수정
-                    .major(majorList[i])
-                    .password(passwordEncoder.encode(passwordList[i]))
-                    .role(Role.ROLE_MANAGER)
-                    .build();
+            for (int i = 0; i < majorList.length; i++) {
+                // 학과별 부스 운영진 계정 생성
+                Member manager = Member.builder()
+                        .studentNum(majorList[i]) // 영문학과명으로 수정
+                        .major(majorList[i])
+                        .password(passwordEncoder.encode(passwordList[i]))
+                        .role(Role.ROLE_MANAGER)
+                        .build();
 
-            memberRepository.save(manager);
+                memberRepository.save(manager);
+            }
+        }
+
+        if (visitRepository.count() == 0) {
+            for (int i = 0; i < majorList.length; i++) {
+                // 학과별 방문율 데이터 생성
+                Visit visit = Visit.builder()
+                        .major(majorList[i])
+                        .visitor(0L)
+                        .totalStudent(100L)
+                        .visitRate(0L)
+                        .ranking(0)
+                        .build();
+
+                visitRepository.save(visit);
+
+            }
         }
     }
 }
