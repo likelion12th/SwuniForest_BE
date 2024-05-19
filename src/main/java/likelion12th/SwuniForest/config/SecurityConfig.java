@@ -56,7 +56,6 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(PathRequest.toH2Console()).permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().permitAll()
                 )
