@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.TimeZone;
+
 @RequiredArgsConstructor
 @Component
 public class DbInit {
@@ -20,6 +22,9 @@ public class DbInit {
 
     @PostConstruct
     public void setDefaultData() {
+        // KST 설정
+        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+
         // 전체 학과 리스트
         String [] majorList = {
                 "소프트웨어융합학과", "dep2", "dep3", "dep4", "dep5", "dep6", "dep7", "dep8", "dep9", "dep10",
