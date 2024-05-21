@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface VisitRepository extends JpaRepository<Visit, Long> {
     Optional<Visit> findByMajor(String major);
 
-    List<Visit> findAllByOrderByVisitRateDesc();
+    List<Visit> findAllByOrderByVisitCountDesc();
 }
