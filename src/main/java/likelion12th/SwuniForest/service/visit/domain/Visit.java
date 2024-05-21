@@ -21,29 +21,29 @@ public class Visit {
     private String major;
 
     // 학과 방문자 수
-    private Long visitor;
+    private Long visitCount;
 
     // 학과 총인원
-    private Long totalStudent;
+    // private Long totalStudent;
 
     // 방문률 산출
-    private Long visitRate;
+    // private Long visitRate;
 
     // 방문율 순위
     private int ranking;
 
 
-    // 방문률 계산 메서드
-    public void setVisitRate(Long visitor, Long totalStudent) {
-        if (totalStudent == 0) {
-            this.visitRate = 0L;
-        } else {
-            this.visitRate = (visitor * 100) / totalStudent;
-        }
-    }
+    // 방문률 백분율 계산 메서드
+//    public void setVisitRate(Long visitor, Long totalStudent) {
+//        if (totalStudent == 0) {
+//            this.visitRate = 0L;
+//        } else {
+//            this.visitRate = (visitor * 100) / totalStudent;
+//        }
+//    }
 
-    public void addVisitor() {
-        visitor++;
+    public void addVisitCount() {
+        visitCount++;
     }
 
     public void setRanking(int ranking) {

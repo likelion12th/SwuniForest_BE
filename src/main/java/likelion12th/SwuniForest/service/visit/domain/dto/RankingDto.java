@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RankingDto {
     private String major;
-    private Long visitRate;
+    private Long visitCount;
     private Integer rank;
 }

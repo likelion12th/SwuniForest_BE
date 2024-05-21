@@ -84,9 +84,7 @@ public class DbInit {
                 // 학과별 방문율 데이터 생성
                 Visit visit = Visit.builder()
                         .major(majorList[i])
-                        .visitor(0L)
-                        .totalStudent(100L)
-                        .visitRate(0L)
+                        .visitCount(0L)
                         .ranking(0)
                         .build();
 

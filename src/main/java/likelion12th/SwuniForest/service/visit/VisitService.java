@@ -26,13 +26,13 @@ public class VisitService {
 
     // 방문율 전체 랭킹 조회
     public List<RankingDto> getVisitRanking() {
-        List<Visit> visitRankingList = visitRepository.findAllByOrderByVisitRateDesc();
+        List<Visit> visitRankingList = visitRepository.findAllByOrderByVisitCountDesc();
 
 
         List<RankingDto> rankingDtoList = visitRankingList.stream()
                 .map(visit -> RankingDto.builder()
                         .major(visit.getMajor())
-                        .visitRate(visit.getVisitRate())
+                        .visitCount(visit.getVisitCount())
                         .rank(visit.getRanking())
                         .build())
                 .collect(Collectors.toList());
@@ -54,7 +54,7 @@ public class VisitService {
         return VisitResDto.builder()
                 .username(member.getUsername())
                 .major(member.getMajor())
-                .visitRate(visit.getVisitRate())
+                .visitCount(visit.getVisitCount())
                 .rank(visit.getRanking())
                 .build();
     }
@@ -67,8 +67,8 @@ public class VisitService {
         if (visitOptional.isPresent()) {
             // 요청한 사용자의 학과 방문 데이터 업데이트
             Visit visit = (Visit) visitOptional.get();
-            visit.addVisitor();
-            visit.setVisitRate(visit.getVisitor(), visit.getTotalStudent());
+            visit.addVisitCount();
+            //visit.setVisitRate(visit.getVisitor(), visit.getTotalStudent());
             visitRepository.save(visit);
 
             // 방문하기 버튼을 누르기 위해선 로그인이 필수이므로 회원이 존재하지 않는 경우의 수는 고려하지 않음
@@ -88,16 +88,16 @@ public class VisitService {
         }
     }
 
-    // 방문율을 기준으로 순위 산출
+    // 방문자수를 기준으로 순위 산출
     private void calculateRankingByVisitRate() {
         List<Visit> allVisits = visitRepository.findAll();
 
-        // 방문율을 기준으로 내림차순 정렬
+        // 방문자수를 기준으로 내림차순 정렬
         List<Visit> sortedVisits = allVisits.stream()
                 .sorted((v1, v2) -> {
-                    int compare = Long.compare(v2.getVisitRate(), v1.getVisitRate());
+                    int compare = Long.compare(v2.getVisitCount(), v1.getVisitCount());
                     if (compare == 0) {
-                        // 방문율이 동일한 경우에는 PK 내림차순으로 순위를 매김
+                        // 방문자수가 동일한 경우에는 PK 내림차순으로 순위를 매김
                         return Long.compare(v2.getId(), v1.getId());
                     }
                     return compare;
@@ -108,8 +108,8 @@ public class VisitService {
         int ranking = 1;
         for (int i = 0; i < sortedVisits.size(); i++) {
             Visit visit = sortedVisits.get(i);
-            if (i > 0 && visit.getVisitRate().equals(sortedVisits.get(i - 1).getVisitRate())) {
-                // 이전 방문 데이터와 방문율이 동일한 경우 이전 순위를 그대로 유지
+            if (i > 0 && visit.getVisitCount().equals(sortedVisits.get(i - 1).getVisitCount())) {
+                // 이전 방문 데이터와 방문자 수가 동일한 경우 이전 순위를 그대로 유지
                 visit.setRanking(sortedVisits.get(i - 1).getRanking());
             } else {
                 visit.setRanking(ranking);
