@@ -25,12 +25,22 @@ public class DbInit {
         // KST 설정
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 
-        // 전체 학과 리스트
-        String [] majorList = {
-                "소프트웨어융합학과", "dep2", "dep3", "dep4", "dep5", "dep6", "dep7", "dep8", "dep9", "dep10",
+        // 전체 학과 아이디 리스트
+        String [] loginIdList = {
+                "dep1", "dep2", "dep3", "dep4", "dep5", "dep6", "dep7", "dep8", "dep9", "dep10",
                 "dep11", "dep12", "dep13", "dep14", "dep15", "dep16", "dep17", "dep18", "dep19",
                 "dep20", "dep21", "dep22", "dep23", "dep24", "dep25", "dep26", "dep27", "dep28",
                 "dep29", "dep30", "dep31", "dep32", "dep33", "dep34", "dep35"
+        };
+
+        String [] majorList = {
+                "경제학과", "문헌정보학과", "사회복지학과", "아동학과", "행정학과", "언론영상학부",
+                "교육심리학과", "스포츠운동과학과", "현대미술전공", "공예전공", "시각디자인전공",
+                "첨단미디어디자인전공", "경영학과", "패션산업학과", "디지털미디어학과", "정보보호학부",
+                "소프트웨어융합학과", "데이터사이언스학과", "산업디자인학과", "글로벌ICT인문융합학부",
+                "국어국문학과", "영어영문학과", "중어중문학과", "일어일문학과", "사학과", "기독교학과",
+                "자율전공학부", "수학과", "화학과", "생명환경공학과", "바이오헬스융합학과",
+                "원예생명조경학과", "식품공학과", "식품영양학과"
         };
 
         // 학과별 비밀번호 리스트
@@ -59,7 +69,7 @@ public class DbInit {
             for (int i = 0; i < majorList.length; i++) {
                 // 학과별 부스 운영진 계정 생성
                 Member manager = Member.builder()
-                        .studentNum(majorList[i]) // 영문학과명으로 수정
+                        .studentNum(loginIdList[i]) // 영문학과명으로 수정
                         .major(majorList[i])
                         .password(passwordEncoder.encode(passwordList[i]))
                         .role(Role.ROLE_MANAGER)

@@ -1,4 +1,4 @@
-package likelion12th.SwuniForest.jwt;
+package likelion12th.SwuniForest.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
