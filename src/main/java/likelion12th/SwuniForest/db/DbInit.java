@@ -72,7 +72,7 @@ public class DbInit {
 
             memberRepository.save(admin);
 
-            for (int i = 0; i < 34; i++) {
+            for (int i = 0; i < 36; i++) {
                 // 학과별 부스 운영진 계정 생성
                 Member manager = Member.builder()
                         .studentNum(loginIdList[i]) // 영문학과명으로 수정
