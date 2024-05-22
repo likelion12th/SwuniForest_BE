@@ -49,7 +49,7 @@ public class DbInit {
                 "식품공학전공", "식품영양학전공", "사이버보안전공", "개인정보보호전공"
         };
 
-        // 학과별 비밀번호 리스트
+        // 학과별 비밀번호 리스트 (dep34까지만)
         String [] passwordList = {
             "8fnSkODZ", "IqriN419", "VJezcA8O", "b49GAQyt", "VQwse9s2", "lDmYe729", "ND2mBtcz", "7XZO46Js",
             "b5FTmB6k", "BRxo8sou", "MMlxy51k", "pvvsgAMN", "W2Y7qeY1", "0EGI2duF", "XBIvxwTf", "6lrAqPyW",
