@@ -18,28 +18,29 @@ jobs:
         uses: cloudtype-github-actions/deploy@v1
         with:
           token: ${{ secrets.CLOUDTYPE_TOKEN }}
-          project: yushinc/swuni_forest_be
+          project: joominse0/swu-forest-be
           stage: main
           yaml: |
             name: swuniforest-be
             app: java@17
             options:
+              ports: 8080
+              healthz: ""
               env:
-                - name: DB_URL
-                  secret: DB_URL
                 - name: DB_PASSWORD
                   secret: DB_PASSWORD
-                - name: NAVER_CLOVA_URL
-                  secret: NAVER_CLOVA_URL
-                - name: NAVER_CLOVA_KEY
-                  secret: NAVER_CLOVA_KEY
+                - name: DB_URL
+                  secret: DB_URL
                 - name: JWT_TOKEN_KEY
                   secret: JWT_TOKEN_KEY
+                - name: NAVER_CLOVA_KEY
+                  secret: NAVER_CLOVA_KEY
+                - name: NAVER_CLOVA_URL
+                  secret: NAVER_CLOVA_URL
                 - name: S3_ACCESS_KEY
                   secret: S3_ACCESS_KEY
                 - name: S3_SECRET_KEY
                   secret: S3_SECRET_KEY
-              ports: "8080"
             context:
               git:
                 url: git@github.com:${{ github.repository }}.git
